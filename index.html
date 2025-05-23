@@ -14,11 +14,23 @@
       overflow-y: auto;
     }
 
-    canvas#matrix {
+    .glitch-background {
       position: fixed;
-      top: 0;
-      left: 0;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       z-index: -1;
+      background: #000;
+      opacity: 0.1;
+      animation: glitch-bg 2s infinite;
+    }
+
+    @keyframes glitch-bg {
+      0% { background-position: 0 0; }
+      20% { background-position: -2px 2px; }
+      40% { background-position: 2px -2px; }
+      60% { background-position: -2px 2px; }
+      80% { background-position: 2px -2px; }
+      100% { background-position: 0 0; }
     }
 
     .container {
@@ -33,7 +45,15 @@
       text-transform: uppercase;
       letter-spacing: 3px;
       text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;
-      animation: glitch 2s linear infinite;
+      animation: glitch-text 1.5s infinite;
+    }
+
+    @keyframes glitch-text {
+      0% { text-shadow: 2px 2px #0f0, -2px -2px #0f0; }
+      25% { text-shadow: -2px 2px #0f0, 2px -2px #0f0; }
+      50% { text-shadow: 2px -2px #0f0, -2px 2px #0f0; }
+      75% { text-shadow: -2px -2px #0f0, 2px 2px #0f0; }
+      100% { text-shadow: 2px 2px #0f0, -2px -2px #0f0; }
     }
 
     .bio {
@@ -68,16 +88,6 @@
       transform: scale(1.05);
     }
 
-    @keyframes glitch {
-      0% { transform: translate(0); }
-      10% { transform: translate(-2px, 2px); }
-      20% { transform: translate(2px, -2px); }
-      30% { transform: translate(-2px, 2px); }
-      40% { transform: translate(2px, -2px); }
-      50% { transform: translate(0); }
-      100% { transform: translate(0); }
-    }
-
     @media (max-width: 600px) {
       h1 { font-size: 1.8em; }
       .bio { font-size: 1em; }
@@ -86,7 +96,7 @@
   </style>
 </head>
 <body>
-  <canvas id="matrix"></canvas>
+  <div class="glitch-background"></div>
 
   <div class="container">
     <h1>[Anonymous-Silva]</h1>
@@ -120,43 +130,6 @@
       }
     }
     type();
-  </script>
-
-  <script>
-    // Matrix background
-    const canvas = document.getElementById("matrix");
-    const ctx = canvas.getContext("2d");
-    canvas.height = window.innerHeight;
-    canvas.width = window.innerWidth;
-
-    const letters = "01";
-    const fontSize = 14;
-    const columns = canvas.width / fontSize;
-    const drops = Array(Math.floor(columns)).fill(1);
-
-    function drawMatrix() {
-      ctx.fillStyle = "rgba(5, 5, 5, 0.05)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      ctx.fillStyle = "#0f0";
-      ctx.font = fontSize + "px monospace";
-
-      for (let i = 0; i < drops.length; i++) {
-        const text = letters.charAt(Math.floor(Math.random() * letters.length));
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-          drops[i] = 0;
-        }
-        drops[i]++;
-      }
-    }
-
-    setInterval(drawMatrix, 33);
-
-    window.addEventListener("resize", () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    });
   </script>
 </body>
 </html>
